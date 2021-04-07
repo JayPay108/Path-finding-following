@@ -22,8 +22,6 @@ class Graph:
         self.nodes[self.first].first = True
         self.nodes[self.last].last = True   
 
-        self.noPath = False  
-
     def getConnections(self, currentNodeNumber):
         currentRow = currentNodeNumber // self.cols
         currentCol = currentNodeNumber % self.rows
@@ -55,17 +53,19 @@ class Graph:
 
 
     def findPath(self, screen):
-        for i in range(1, len(self.nodes)):
+        for i in range(len(self.nodes)):
             self.nodes[i].status = UNVISITED
-            self.nodes[i].previous = UNDEFINED
+            self.nodes[i].previous = None
             self.nodes[i].costSoFar = float('inf')
 
         self.nodes[self.first].status = OPEN
-        self.nodes[self.first].draw(screen)
         self.nodes[self.first].costSoFar = 0
         openNodes = [self.first]
 
-        while len(openNodes) > 0:            
+        self.nodes[self.first].draw(screen)
+        pygame.display.update()
+
+        while len(openNodes) > 0:           
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -81,7 +81,6 @@ class Graph:
             currentConnections = self.getConnections(currentNodeNumber)
 
             for toNodeNumber in currentConnections:
-
                 toCost = self.nodes[currentNodeNumber].costSoFar + 1
 
                 if toCost < self.nodes[toNodeNumber].costSoFar:
@@ -94,18 +93,21 @@ class Graph:
                     
                     if toNodeNumber not in openNodes:
                         openNodes.append(toNodeNumber)
+                        pygame.display.update()
             
             
             self.nodes[currentNodeNumber].status = CLOSED
             openNodes.remove(currentNodeNumber)
             self.nodes[currentNodeNumber].draw(screen)
+            pygame.display.update()
+
 
     def retrievePath(self):
         x = []
         y = []
 
         current = self.last
-        while (current != self.first) and (current != UNDEFINED):
+        while (current != self.first) and (current != None):
             x.append(self.nodes[current].xLocation)
             y.append(self.nodes[current].yLocation)
 
@@ -126,6 +128,7 @@ class Graph:
         
         for node in self.nodes:
             node.draw(screen)
+        pygame.display.update()
 
     def getSelected(self, pos):
         for row in range(self.rows):

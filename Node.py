@@ -1,7 +1,6 @@
 import pygame
 import math
 
-UNDEFINED = 0
 UNVISITED = 1
 OPEN = 2
 CLOSED = 3
@@ -47,10 +46,10 @@ class Node:
             color = (218, 218, 218)
 
         pygame.draw.rect(screen, color, (self.xLocation, self.yLocation, 28, 28))
-        pygame.display.update()
 
     def makeWall(self, wall, screen):
         if not self.first and not self.last:
             self.wall = wall
 
         self.draw(screen)
+        pygame.display.update()
