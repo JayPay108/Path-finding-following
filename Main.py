@@ -11,6 +11,10 @@ ROWS = SIZE[1]
 XPIXELS = COLS * 30
 YPIXELS = ROWS * 30
 
+# Dont adjust these to be very high, character will jump walls
+CHARACTERSPEED = 4
+CHARACTEROFFSET = 50    # This is an absolute value, not a path param
+
 screen = pygame.display.set_mode((XPIXELS, YPIXELS))
 
 while True:
@@ -63,10 +67,10 @@ while True:
         continue
 
     pathDistance = path.distance[-1]
-    followPathOffset = 35 / pathDistance
+    followPathOffset = CHARACTEROFFSET / pathDistance
 
     startPos = Vector(graph.nodes[graph.first].xLocation, graph.nodes[graph.first].yLocation)
-    character = Character(position = startPos, maxSpeed = 2, maxAccleration = 2, offset = followPathOffset)
+    character = Character(position = startPos, maxSpeed = CHARACTERSPEED, maxAccleration = 2, offset = followPathOffset)
 
     location = (int(character.position.x), int(character.position.y))
     lastLocation = location
