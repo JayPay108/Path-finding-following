@@ -10,3 +10,5 @@ A* will look for a path starting at the left yellow tile and ending at the right
 
 If a path is found, a red line will be drawn using a Dynamic movement path follow algorithm
 If a path is not found, the starting and ending tiles will turn red
+
+After path has completed, press any key to restart the entire process
