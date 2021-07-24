@@ -24,7 +24,7 @@ class Graph:
 
     def getConnections(self, currentNodeNumber):
         currentRow = currentNodeNumber // self.cols
-        currentCol = currentNodeNumber % self.rows
+        currentCol = currentNodeNumber % self.cols
 
         connections = []
         
@@ -32,7 +32,7 @@ class Graph:
             newRow = currentRow + direction[0]
             newCol = currentCol + direction[1]
             newNodeNumber = (newRow * self.cols) + newCol
-
+            
             if newRow in range(self.rows) and newCol in range(self.cols):
                 if not self.nodes[newNodeNumber].wall:
                     connections.append(newNodeNumber)
