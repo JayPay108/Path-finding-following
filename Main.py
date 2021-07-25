@@ -3,7 +3,7 @@ from DynamicMovement import Character
 from Vector import Vector
 import pygame
 
-SIZE = (30, 20) # (columns, rows)
+SIZE = (39, 23) # (columns, rows)
 
 COLS = SIZE[0]
 ROWS = SIZE[1]
@@ -31,7 +31,10 @@ while True:
                 exit()
 
             elif event.type == pygame.KEYDOWN:
-                makingBoard = False
+                if event.key == pygame.K_RETURN:
+                    makingBoard = False
+                elif event.key == pygame.K_r:
+                    graph.generateMaze(screen)
 
         clicks = pygame.mouse.get_pressed()
         pos = pygame.mouse.get_pos()

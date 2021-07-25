@@ -1,8 +1,10 @@
 from Path import Path
 from Node import *
 import time
+import random
 
-SLEEPTIME = 0
+PATHFINDINGSLEEPTIME = 0.01 # Slow down pathfinding representation
+MAZEGENERATIONSLEEPTIME = 0.02 # Slow down maze generation
 
 class Graph:
     def __init__(self, size):
@@ -16,8 +18,11 @@ class Graph:
                 self.nodes.append(Node(nodeNumber, 0, 0, 0, 0, (col * 30) + 1, (row * 30) + 1))
                 nodeNumber += 1
 
-        self.first = ((self.rows // 2) * self.cols) + 3
-        self.last = (((self.rows // 2) + 1) * (self.cols)) - 4
+        # Start and finish node locations
+        # self.first = ((self.rows // 2) * self.cols) + 3
+        # self.last = (((self.rows // 2) + 1) * (self.cols)) - 4
+        self.first = 0
+        self.last = (self.rows * self.cols) - 1
 
         self.nodes[self.first].first = True
         self.nodes[self.last].last = True   
@@ -71,7 +76,7 @@ class Graph:
                     pygame.quit()
                     exit()
 
-            time.sleep(SLEEPTIME)
+            time.sleep(PATHFINDINGSLEEPTIME)
 
             currentNodeNumber = self.findLowest(openNodes)
 
@@ -141,3 +146,77 @@ class Graph:
                     return nodeNumber        
 
         return None
+
+    def generateMaze(self, screen):
+        for row in range(self.rows):
+            for col in range(self.cols):
+                nodeNumber = (row * self.cols) + col
+
+                self.nodes[nodeNumber].wall = True
+                self.nodes[nodeNumber].inMaze = False
+                self.nodes[nodeNumber].directions = {'U': False, 'D': False, 'L': False, 'R': False}
+
+        locations = [self.first]
+        self.nodes[self.first].inMaze = True
+
+        self.nodes[self.last].wall = False
+
+        while locations != []:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
+
+            current = locations[-1]
+
+            next = self.makeMazeConnection(current)
+            if next != None and next != self.last:
+                locations.append(next)
+                
+                time.sleep(MAZEGENERATIONSLEEPTIME)
+                self.draw(screen)
+            else:
+                del locations[-1]
+
+        if self.rows % 2 == 0 and self.cols % 2 == 0:
+            self.nodes[-2].wall = False
+
+        self.draw(screen)
+    
+    def makeMazeConnection(self, nodeNumber):
+        neighbors = [('U', -self.cols), ('D', self.cols), ('L', -1), ('R', 1)]
+        random.shuffle(neighbors)
+
+        for neighbor in neighbors:
+            newNodeNumber = nodeNumber + (2 * neighbor[1])
+
+            direction = neighbor[0]
+            if direction == 'D':
+                fromDirection = 'U'
+            elif direction == 'U':
+                fromDirection = 'D'
+            elif direction == 'L':
+                fromDirection = 'R'
+            else:
+                fromDirection = 'L'
+
+            currentRow = nodeNumber // self.cols
+            newRow = newNodeNumber // self.cols
+            if direction == 'L' or direction == 'R':
+                if currentRow != newRow:
+                    continue
+
+            if newNodeNumber in range(len(self.nodes)) and not self.nodes[newNodeNumber].inMaze:
+                self.nodes[nodeNumber].directions[direction] = True
+                self.nodes[nodeNumber].inMaze = True
+
+                self.nodes[nodeNumber + neighbor[1]].wall = False
+
+                self.nodes[newNodeNumber].directions[fromDirection] = True
+                self.nodes[newNodeNumber].inMaze = True
+                self.nodes[newNodeNumber].wall = False
+
+                return newNodeNumber
+
+        return None
+

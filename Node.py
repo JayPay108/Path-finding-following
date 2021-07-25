@@ -20,6 +20,9 @@ class Node:
         self.first = False
         self.last = False
 
+        self.inMaze = False
+        self.directions = {'U': False, 'D': False, 'L': False, 'R': False}
+
     # Calculating distance between two nodes using standard Euclidean distance formula
     def distanceFrom(self, node2):
         x1 = self.xLocation
