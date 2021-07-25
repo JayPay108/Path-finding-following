@@ -161,6 +161,8 @@ class Graph:
 
         self.nodes[self.last].wall = False
 
+        self.draw(screen) # Updating entire graph
+
         while locations != []:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -169,21 +171,19 @@ class Graph:
 
             current = locations[-1]
 
-            next = self.makeMazeConnection(current)
+            next = self.makeMazeConnection(current, screen)
             if next != None and next != self.last:
                 locations.append(next)
                 
                 time.sleep(MAZEGENERATIONSLEEPTIME)
-                self.draw(screen)
             else:
                 del locations[-1]
 
         if self.rows % 2 == 0 and self.cols % 2 == 0:
             self.nodes[-2].wall = False
-
-        self.draw(screen)
+            self.nodes[-2].draw(screen)
     
-    def makeMazeConnection(self, nodeNumber):
+    def makeMazeConnection(self, nodeNumber, screen):
         neighbors = [('U', -self.cols), ('D', self.cols), ('L', -1), ('R', 1)]
         random.shuffle(neighbors)
 
@@ -209,12 +209,17 @@ class Graph:
             if newNodeNumber in range(len(self.nodes)) and not self.nodes[newNodeNumber].inMaze:
                 self.nodes[nodeNumber].directions[direction] = True
                 self.nodes[nodeNumber].inMaze = True
+                self.nodes[nodeNumber].draw(screen)
 
                 self.nodes[nodeNumber + neighbor[1]].wall = False
+                self.nodes[nodeNumber + neighbor[1]].draw(screen)
 
                 self.nodes[newNodeNumber].directions[fromDirection] = True
                 self.nodes[newNodeNumber].inMaze = True
                 self.nodes[newNodeNumber].wall = False
+                self.nodes[newNodeNumber].draw(screen)
+
+                pygame.display.update() # Updating newly drawn nodes
 
                 return newNodeNumber
 

@@ -3,7 +3,7 @@ from DynamicMovement import Character
 from Vector import Vector
 import pygame
 
-SIZE = (39, 23) # (columns, rows)
+SIZE = (271, 41)#(39, 23) # (columns, rows)
 
 COLS = SIZE[0]
 ROWS = SIZE[1]
