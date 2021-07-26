@@ -113,14 +113,29 @@ class Graph:
 
         current = self.last
         while (current != self.first) and (current != None):
-            x.append(self.nodes[current].xLocation)
-            y.append(self.nodes[current].yLocation)
+            currentX = self.nodes[current].xLocation
+            currentY = self.nodes[current].yLocation
+
+            # Overwriting nodes in between two nodes in the path if all 3 form a straight line
+            if len(x) >= 2 and ((x[-2] == x[-1] == currentX) or (y[-2] == y[-1] == currentY)):
+                x[-1] = currentX
+                y[-1] = currentY
+            else:
+                x.append(currentX)
+                y.append(currentY)
 
             current = self.nodes[current].previous
 
         if current == self.first:
-            x.append(self.nodes[current].xLocation)
-            y.append(self.nodes[current].yLocation)
+            currentX = self.nodes[current].xLocation
+            currentY = self.nodes[current].yLocation
+
+            if len(x) >= 2 and ((x[-2] == x[-1] == currentX) or (y[-2] == y[-1] == currentY)):
+                x[-1] = currentX
+                y[-1] = currentY
+            else:
+                x.append(currentX)
+                y.append(currentY)
 
             path = Path(x[::-1], y[::-1])
         else:
