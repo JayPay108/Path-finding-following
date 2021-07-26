@@ -10,7 +10,7 @@ class Steering:
 # Character class to store each individual character's movements
 class Character:
     def __init__(self, position = Vector(0, 0), velocity = Vector(0, 0), linear = Vector(0, 0), orientation = 0, rotation = 0,
-                angular = 0, maxSpeed = 0, maxAccleration = 0, offset = 0):
+                angular = 0, maxSpeed = 0, maxAcceleration = 0, offset = 0):
 
         self.position = position
         self.velocity = velocity
@@ -19,7 +19,7 @@ class Character:
         self.rotation = rotation
         self.angular = angular
         self.maxSpeed = maxSpeed
-        self.maxAcceleration = maxAccleration
+        self.maxAcceleration = maxAcceleration
         self.offset = offset
 
     def followPath(self, path):

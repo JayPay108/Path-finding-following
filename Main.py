@@ -3,7 +3,7 @@ from DynamicMovement import Character
 from Vector import Vector
 import pygame
 
-SIZE = (271, 41)#(39, 23) # (columns, rows)
+SIZE = (39, 23) # (columns, rows)
 
 COLS = SIZE[0]
 ROWS = SIZE[1]
@@ -73,7 +73,7 @@ while True:
     followPathOffset = CHARACTEROFFSET / pathDistance
 
     startPos = Vector(graph.nodes[graph.first].xLocation, graph.nodes[graph.first].yLocation)
-    character = Character(position = startPos, maxSpeed = CHARACTERSPEED, maxAccleration = 2, offset = followPathOffset)
+    character = Character(position = startPos, maxSpeed = CHARACTERSPEED, maxAcceleration = 2, offset = followPathOffset)
 
     location = (int(character.position.x), int(character.position.y))
     lastLocation = location
@@ -89,7 +89,7 @@ while True:
 
         location = (int(character.position.x), int(character.position.y))
 
-        pygame.draw.line(screen, (255, 0 , 0), (lastLocation[0] + 15, lastLocation[1] + 15), (location[0] + 15, location[1] + 15), 4)
+        pygame.draw.line(screen, (255, 0 , 0), (lastLocation[0] + 15, lastLocation[1] + 15), (location[0] + 15, location[1] + 15), 4)        
         pygame.display.update()
 
         lastLocation = location

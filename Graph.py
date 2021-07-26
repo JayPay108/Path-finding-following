@@ -156,8 +156,8 @@ class Graph:
                 self.nodes[nodeNumber].inMaze = False
                 self.nodes[nodeNumber].directions = {'U': False, 'D': False, 'L': False, 'R': False}
 
-        locations = [self.first]
-        self.nodes[self.first].inMaze = True
+        locations = [self.last]
+        self.nodes[self.last].inMaze = True
 
         self.nodes[self.last].wall = False
 
@@ -172,7 +172,7 @@ class Graph:
             current = locations[-1]
 
             next = self.makeMazeConnection(current, screen)
-            if next != None and next != self.last:
+            if next != None and next != self.first:
                 locations.append(next)
                 
                 time.sleep(MAZEGENERATIONSLEEPTIME)
@@ -180,8 +180,9 @@ class Graph:
                 del locations[-1]
 
         if self.rows % 2 == 0 and self.cols % 2 == 0:
-            self.nodes[-2].wall = False
-            self.nodes[-2].draw(screen)
+            self.nodes[1].wall = False
+            self.nodes[1].draw(screen)
+            pygame.display.update()
     
     def makeMazeConnection(self, nodeNumber, screen):
         neighbors = [('U', -self.cols), ('D', self.cols), ('L', -1), ('R', 1)]
